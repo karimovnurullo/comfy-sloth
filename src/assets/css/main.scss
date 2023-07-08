@@ -1,0 +1,324 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+@font-face {
+	font-family: "Ego";
+	src: url("../fonts/Ego-Regular.woff2");
+}
+
+@font-face {
+	font-family: "Ego Outline";
+	src: url("../fonts/Ego-Outline.woff2");
+}
+
+@font-face {
+	font-family: "Arial Rounded";
+	src: url("../fonts/Arial-Rounded.woff2");
+}
+
+@font-face {
+	font-family: 'Associate Sans';
+	src: url("../fonts/AssociateSans-Medium.woff2");
+}
+
+@font-face {
+	font-family: 'Concord W00 Regular';
+	src: url("../fonts/Concord-W00-Regular.woff2");
+}
+
+@font-face {
+	font-family: "Factor A";
+	src: url("../fonts/FactorAMedium-Regular.woff2");
+}
+
+@font-face {
+	font-family: 'Gina';
+	src: url("../fonts/Gina-Medium.woff2");
+}
+
+@font-face {
+	font-family: 'Nord';
+	src: url("../fonts/Nord-Medium.woff2");
+}
+
+@font-face {
+	font-family: 'Outfit';
+	src: url("../fonts/Outfit-Medium.woff2");
+}
+
+@font-face {
+	font-family: 'Outfit Extra Bold';
+	src: url("../fonts/Outfit-ExtraBold.woff2");
+}
+
+@font-face {
+	font-family: 'PF Centro Sans Pro';
+	src: url("../fonts/PFCentroSansPro-Black.woff2");
+}
+
+@font-face {
+	font-family: 'Chillax';
+	src: url("../fonts/Chillax-Medium.woff2");
+}
+
+@font-face {
+	font-family: 'Clash Display';
+	src: url("../fonts/ClashDisplay-Medium.woff2");
+}
+
+@font-face {
+	font-family: 'Technor';
+	src: url("../fonts/Technor-Regular.woff2");
+}
+
+@font-face {
+	font-family: 'Author';
+	src: url("../fonts/Author-Medium.woff2");
+}
+
+@font-face {
+	font-family: 'Pally';
+	src: url("../fonts/Pally-Medium.woff2");
+}
+
+// ----------------------------------------------------------------
+
+
+:root {
+	--font-ego: "Ego";
+	--font-ego-outline: "Ego Outline";
+	--font-arial-rounded: "Arial Rounded";
+	--font-poppins: "Poppins";
+	--font-inter: "Inter";
+	--font-associate: "Associate Sans";
+	--font-concord: "Concord W00 Regular";
+	--font-nord: "Nord";
+	--font-outfit: "Outfit";
+	--font-outfit-bold: "Outfit Extra Bold";
+	--font-centro: "PF Centro Sans Pro";
+	--font-chillax: "Chillax";
+	--font-clash-display: "Clash Display";
+	--font-technor: "Technor";
+	--font-author: "Author";
+	--font-pally: "Pally";
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	scroll-behavior: smooth;
+	user-select: none;
+}
+
+::-webkit-scrollbar {
+	width: 5px;
+	border-radius: 10px;
+	// background-color: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background-color: #263238;
+	// border: 3px solid #fff;
+}
+
+
+#root {
+	// background-color: #0d1013;
+	background-color: #fff;
+	color: #000;
+	// width: 100%;
+	// // display: flex;
+	// // justify-content: center;
+	// height: 100vh;
+	font-family: var(--font-concord), sans-serif;
+}
+
+.app-container {
+	width: 100%;
+	display: flex;
+	padding: 50px;
+	gap: 30px;
+
+	.menus {
+		width: 200px;
+		height: 480px;
+		// background-color: #eee;
+
+		.search {
+			height: 30px;
+			border-radius: 8px;
+			background-color: #F1F5F8;
+			padding: 0 10px;
+		}
+
+		.category {
+			display: flex;
+			flex-direction: column;
+			margin-top: 10px;
+			height: 300px;
+			overflow: auto;
+			letter-spacing: 1px;
+
+			.title {
+				font-size: 20px;
+				color: #102a42;
+				font-weight: 600;
+				margin-bottom: 10px;
+			}
+
+			.menu {
+				color: #617d98;
+				font-size: 16px;
+				cursor: pointer;
+				margin-top: 5px;
+
+				&.active {
+					text-decoration: underline;
+				}
+			}
+		}
+
+		.price-part {
+			margin-top: 20px;
+
+			.title {
+				font-size: 20px;
+				color: #102a42;
+				font-weight: 600;
+				margin-top: 10px;
+			}
+
+			.price-number {
+				margin-top: 6px;
+				margin-bottom: 6px;
+			}
+
+			input {
+				cursor: pointer;
+			}
+		}
+	}
+
+	.products {
+		width: calc(100% - 200px);
+		// background-color: rgb(172, 172, 172);
+
+		.nav {
+			display: flex;
+			gap: 30px;
+			height: 30px;
+			align-items: center;
+
+			.icons {
+				display: flex;
+				gap: 5px;
+
+				i {
+					font-size: 20px;
+					font-weight: 600;
+					cursor: pointer;
+				}
+			}
+
+			.line {
+				width: 400px;
+				outline: none;
+				border: 0;
+				height: 1px;
+				background-color: #717171;
+				// grid-template-columns: 1rf 1fr 1fr;
+			}
+
+		}
+
+		.main {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			// grid-template-columns: repeat(3, 1fr);
+			gap: 20px;
+			height: 490px;
+			overflow: auto;
+			margin-top: 20px;
+
+			.product {
+				width: 100%;
+				height: 220px;
+				border-radius: 8px;
+				overflow: hidden;
+				cursor: pointer;
+
+				.img-box {
+					height: 180px;
+
+					img {
+						width: 100%;
+						height: 100%;
+						object-fit: cover;
+					}
+				}
+
+				.content {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					background-color: #fff;
+					height: 40px;
+					padding: 0 10px;
+
+					.title {
+						font-size: 20px;
+					}
+				}
+			}
+		}
+
+
+	}
+
+	.loader {
+		position: fixed;
+		width: 100%;
+		height: calc(100vh - 90px);
+		top: 60px;
+		left: 0;
+		// background: rgba(255, 255, 255, 0.758);
+		background-color: red;
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+		border: 1px solid rgba(255, 255, 255, 0.18);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 999999;
+
+		.lds-ripple {
+			display: inline-block;
+			position: relative;
+			width: 80px;
+			height: 80px;
+
+			div {
+				position: absolute;
+				border: 4px solid #4d4d4d;
+				opacity: 1;
+				border-radius: 50%;
+				animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+
+				&:nth-child(2) {
+					animation-delay: -0.5s;
+				}
+			}
+
+			&:nth-child(2) {
+				animation-delay: -0.5s;
+			}
+		}
+
+	}
+
+
+
+
+}
