@@ -6,21 +6,34 @@ import { IEntity } from "../types";
 interface ProductsProps {
   products: IEntity.IProduct[];
   onNavigate: (id: string) => void;
+  onSort: (value: string) => void;
 }
+
 interface ProductsState {
   sortBy: string;
+  options: { value: string; title: string }[];
 }
 
 export default class Products extends Component<ProductsProps, ProductsState> {
-  state = {
+  state: ProductsState = {
     sortBy: "lowest",
+    options: [
+      { value: "lowest", title: "Price (Lowest)" },
+      { value: "highest", title: "Price (Highest)" },
+      { value: "a-z", title: "Name (A-Z)" },
+      { value: "z-a", title: "Name (Z-A)" },
+    ],
   };
+
   handleSort = (value: string) => {
     this.setState({ sortBy: value });
+    this.props.onSort(value);
   };
+
   render() {
     const { products, onNavigate } = this.props;
-    const { handleSort } = this;
+    const { sortBy, options } = this.state;
+
     return (
       <div className="products">
         <div className="nav">
@@ -32,18 +45,19 @@ export default class Products extends Component<ProductsProps, ProductsState> {
           <hr className="line" />
           <div>Sort By</div>
           <select
-            id=""
             className="form-control"
-            onChange={(e) => handleSort(e.target.value)}
+            value={sortBy}
+            onChange={(e) => this.handleSort(e.target.value)}
           >
-            <option value="lowest">Price(Lowest) </option>
-            <option value="highest">Price(Highest) </option>
-            <option value="a-z">Name (A-Z)</option>
-            <option value="z-a">Name (Z-A)</option>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.title}
+              </option>
+            ))}
           </select>
         </div>
         <div className="main">
-          {products.length != 0 ? (
+          {products.length !== 0 ? (
             products.map((product) => (
               <Product
                 key={product.id}

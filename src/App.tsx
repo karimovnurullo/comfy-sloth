@@ -8,6 +8,7 @@ interface AppState {
   category: string;
   pathname: string;
   filteredProducts: IEntity.IProduct[];
+  sortBy: string;
 }
 
 export default class App extends Component<{}, AppState> {
@@ -16,11 +17,15 @@ export default class App extends Component<{}, AppState> {
     category: "all",
     pathname: window.location.pathname,
     filteredProducts: [],
+    sortBy: "lowest",
   };
 
   getProducts = async () => {
     const { data } = await axios.get(`${baseURL}/products`);
-    this.setState({ products: data.products, filteredProducts: data.products });
+    this.setState({
+      products: data.products,
+      filteredProducts: data.products,
+    });
     localStorage.setItem("products", JSON.stringify(data.products));
   };
 
@@ -53,9 +58,38 @@ export default class App extends Component<{}, AppState> {
     });
   };
 
+  handleSort = (value: string) => {
+    this.setState({ sortBy: value });
+  };
+
+  sortProducts = () => {
+    const { filteredProducts, sortBy } = this.state;
+    let sortedProducts = [...filteredProducts];
+
+    switch (sortBy) {
+      case "lowest":
+        sortedProducts.sort((a, b) => a.price - b.price);
+        break;
+      case "highest":
+        sortedProducts.sort((a, b) => b.price - a.price);
+        break;
+      case "a-z":
+        sortedProducts.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case "z-a":
+        sortedProducts.sort((a, b) => b.title.localeCompare(a.title));
+        break;
+      default:
+        break;
+    }
+
+    return sortedProducts;
+  };
+
   getPage = () => {
-    const { pathname, filteredProducts, category, products } = this.state;
+    const { pathname, category, products } = this.state;
     const { handleNavigate } = this;
+    const sortedProducts = this.sortProducts();
     const productIds = products.map((product: IEntity.IProduct) => product.id);
 
     if (pathname === "/") {
@@ -63,17 +97,10 @@ export default class App extends Component<{}, AppState> {
         <Home
           onSearch={this.handleSearch}
           onFilter={this.handleFilter}
-          products={filteredProducts ? filteredProducts : products}
+          onSort={this.handleSort}
+          products={sortedProducts}
           onNavigate={handleNavigate}
         />
-        // <Home
-        //   onSearch={this.handleSearch}
-        //   onFilter={this.handleFilter}
-        //   products={
-        //     category === "all" ? products : filteredProducts || products
-        //   }
-        //   onNavigate={handleNavigate}
-        // />
       );
     } else if (productIds.includes(parseInt(pathname.substring(1)))) {
       return <Page onNavigate={handleNavigate} />;

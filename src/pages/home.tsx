@@ -6,15 +6,16 @@ interface HomeProps {
   products: IEntity.IProduct[];
   onNavigate: (pathname: string) => void;
   onSearch: (value: string) => void;
+  onSort: (value: string) => void;
 }
 
 export default class Home extends Component<HomeProps> {
   render() {
-    const { onFilter, products, onNavigate } = this.props;
+    const { onFilter, products, onNavigate, onSort } = this.props;
     return (
       <div className="app-container">
         <Menus onSearch={this.props.onSearch} onFilter={onFilter} />
-        <Products products={products} onNavigate={onNavigate} />
+        <Products onSort={onSort} products={products} onNavigate={onNavigate} />
       </div>
     );
   }

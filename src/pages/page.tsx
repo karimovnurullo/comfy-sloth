@@ -54,7 +54,6 @@ export default class Page extends Component<PageProps, PageState> {
     const product: IEntity.IProduct = JSON.parse(
       localStorage.getItem("product")!
     );
-    const images = product.images;
 
     if (notFound) {
       return <NotFound onNavigate={this.props.onNavigate} />;
@@ -93,7 +92,7 @@ export default class Page extends Component<PageProps, PageState> {
               className="w-full h-[450px] border-[1px] border-[#ab7a5f] object-cover  rounded-[10px]"
             />
             <div className="w-full h-fit py-[10px] flex gap-[10px] overflow-x-auto">
-              {images.map((img) => (
+              {product.images.map((img) => (
                 <img
                   key={img}
                   src={img}
