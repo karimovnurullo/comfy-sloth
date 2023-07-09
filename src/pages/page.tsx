@@ -78,7 +78,7 @@ export default class Page extends Component<PageProps, PageState> {
     }
 
     return (
-      <div className="w-full p-[30px] ">
+      <div className="w-full p-[50px] ">
         <button
           onClick={() => handleNavigate("/")}
           className="uppercase text-[#eaded7] bg-[#ab7a5f] p-[10px] text-[20px] rounded-[10px]"
@@ -86,20 +86,20 @@ export default class Page extends Component<PageProps, PageState> {
           Back to products
         </button>
         <div className="w-full h-full flex gap-10 bg-red-500 mt-[50px]">
-          <div className="w-1/2 h-[430px]">
+          <div className="w-[550px] h-[530px]">
             <img
               src={mainImage}
               alt="Product image"
-              className="w-full h-full object-cover"
+              className="w-full h-[450px] object-cover  rounded-[10px]"
             />
-            <div className="w-full h-fit p-[10px] flex gap-[10px] bg-red-800">
+            <div className="w-full h-[95px] py-[10px] flex gap-[10px] overflow-x-auto overflow-y-hidden">
               {images.map((img) => (
                 <img
                   key={img}
                   src={img}
                   alt="Product image"
                   onClick={() => handleImage(img)}
-                  className="h-[75px] object-cover w-[90px] rounded-[6px] cursor-pointer"
+                  className="h-[75px] object-cover w-full rounded-[6px] cursor-pointer active:scale-[0.96]"
                 />
               ))}
             </div>
