@@ -9,6 +9,7 @@ interface AppState {
   pathname: string;
   filteredProducts: IEntity.IProduct[];
   sortBy: string;
+  sortPrice: number;
 }
 
 export default class App extends Component<{}, AppState> {
@@ -18,6 +19,7 @@ export default class App extends Component<{}, AppState> {
     pathname: window.location.pathname,
     filteredProducts: [],
     sortBy: "lowest",
+    sortPrice: 0,
   };
 
   getProducts = async () => {
@@ -61,9 +63,12 @@ export default class App extends Component<{}, AppState> {
   handleSort = (value: string) => {
     this.setState({ sortBy: value });
   };
+  handlePriceChange = (value: number) => {
+    this.setState({ sortPrice: value });
+  };
 
   sortProducts = () => {
-    const { filteredProducts, sortBy } = this.state;
+    const { filteredProducts, sortBy, sortPrice } = this.state;
     let sortedProducts = [...filteredProducts];
 
     switch (sortBy) {
@@ -83,12 +88,18 @@ export default class App extends Component<{}, AppState> {
         break;
     }
 
+    if (sortPrice > 0) {
+      sortedProducts = sortedProducts.filter(
+        (product) => product.price <= sortPrice
+      );
+    }
+
     return sortedProducts;
   };
 
   getPage = () => {
     const { pathname, category, products } = this.state;
-    const { handleNavigate } = this;
+    const { handleNavigate, handlePriceChange } = this;
     const sortedProducts = this.sortProducts();
     const productIds = products.map((product: IEntity.IProduct) => product.id);
 
@@ -100,6 +111,7 @@ export default class App extends Component<{}, AppState> {
           onSort={this.handleSort}
           products={sortedProducts}
           onNavigate={handleNavigate}
+          onPrice={handlePriceChange}
         />
       );
     } else if (productIds.includes(parseInt(pathname.substring(1)))) {
