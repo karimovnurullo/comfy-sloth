@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 // import Category from "./category";
 import axios from "axios";
+import { IEntity, baseURL } from "../types";
 interface MenusState {
   categories: String[];
+  products: IEntity.IProduct[];
 }
 interface MenusProps {
   onFilter: (title: string) => void;
@@ -11,19 +13,39 @@ interface MenusProps {
 export default class Menus extends Component<MenusProps, MenusState> {
   state = {
     categories: [],
+    products: [],
   };
   getCategories = async () => {
-    const { data } = await axios.get(
-      "https://dummyjson.com/products/categories"
-    );
+    const { data } = await axios.get(`${baseURL}/products/categories`);
     this.setState({ categories: data });
   };
+  getProducts = async () => {
+    const { data } = await axios.get(`${baseURL}/products`);
+    this.setState({ products: data.products });
+  };
+  filteredCategories = () => {
+    const { categories, products } = this.state;
+    let arr: string[] = [];
+
+    categories.forEach((category) => {
+      const categoryProducts = products.filter(
+        (product: IEntity.IProduct) => product.category === category
+      );
+      if (categoryProducts.length > 0) {
+        arr.push(category);
+      }
+    });
+
+    return arr;
+  };
+
   componentDidMount(): void {
     this.getCategories();
+    this.getProducts();
   }
   render() {
-    const { categories } = this.state;
     const { onFilter, onSearch } = this.props;
+    const arr = this.filteredCategories();
     return (
       <div className="menus">
         <input
@@ -38,7 +60,7 @@ export default class Menus extends Component<MenusProps, MenusState> {
             <li className="menu" onClick={() => onFilter("all")}>
               All
             </li>
-            {categories.map((title) => (
+            {arr.map((title) => (
               <li key={title} className="menu" onClick={() => onFilter(title)}>
                 {title}
               </li>
