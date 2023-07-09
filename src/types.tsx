@@ -11,7 +11,7 @@ export namespace IEntity {
     brand: string;
     category: string;
     thumbnail: string;
-    images: String[];
+    images: string[];
   }
 }
 export const baseURL = "https://dummyjson.com";
