@@ -6,6 +6,7 @@ interface MenusState {
 }
 interface MenusProps {
   onFilter: (title: string) => void;
+  onSearch: (value: string) => void;
 }
 export default class Menus extends Component<MenusProps, MenusState> {
   state = {
@@ -22,10 +23,15 @@ export default class Menus extends Component<MenusProps, MenusState> {
   }
   render() {
     const { categories } = this.state;
-    const { onFilter } = this.props;
+    const { onFilter, onSearch } = this.props;
     return (
       <div className="menus">
-        <input type="search" placeholder="Search" className="search" />
+        <input
+          type="search"
+          onChange={(e) => onSearch(e.target.value)}
+          placeholder="Search"
+          className="search"
+        />
         <div className="category">
           <div className="title">Category</div>
           <ul>

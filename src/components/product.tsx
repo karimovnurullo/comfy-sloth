@@ -21,7 +21,9 @@ export default class Product extends Component<ProductProps> {
           <img src={thumbnail} alt="" />
         </div>
         <div className="content">
-          <p className="title">{title}</p>
+          <p className="title w-[200px] overflow-hidden whitespace-nowrap text-ellipsis ">
+            {title}
+          </p>
           <p className="price">${price}</p>
         </div>
       </div>

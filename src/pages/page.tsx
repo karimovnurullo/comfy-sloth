@@ -85,24 +85,51 @@ export default class Page extends Component<PageProps, PageState> {
         >
           Back to products
         </button>
-        <div className="w-full h-full flex gap-10 bg-red-500 mt-[50px]">
-          <div className="w-[550px] h-[530px]">
+        <div className="w-full h-fit flex gap-10 mt-[50px]">
+          <div className="w-[550px] ">
             <img
               src={mainImage}
               alt="Product image"
-              className="w-full h-[450px] object-cover  rounded-[10px]"
+              className="w-full h-[450px] border-[1px] border-[#ab7a5f] object-cover  rounded-[10px]"
             />
-            <div className="w-full h-[95px] py-[10px] flex gap-[10px] overflow-x-auto overflow-y-hidden">
+            <div className="w-full h-fit py-[10px] flex gap-[10px] overflow-x-auto">
               {images.map((img) => (
                 <img
                   key={img}
                   src={img}
                   alt="Product image"
                   onClick={() => handleImage(img)}
-                  className="h-[75px] object-cover w-full rounded-[6px] cursor-pointer active:scale-[0.96]"
+                  className={`${
+                    mainImage === img
+                      ? "border-[3px] border-[#000]"
+                      : "border-[1px] border-[#ab7a5f]"
+                  } h-[75px]  object-cover w-[102px] rounded-[6px] cursor-pointer active:scale-[0.96]`}
                 />
               ))}
             </div>
+          </div>
+          <div className="w-1/2 ">
+            <h2 className="text-[40px] font-outfit_bold text-[#102a42]">
+              {product.title}
+            </h2>
+            <p className="text-[30px] mt-[20px] font-outfit_bold text-[#ab7a5f] font-bold">
+              ${product.price}
+            </p>
+            <div className="text-[18px] flex gap-[50px] mt-[20px] text-[#102a42]">
+              <div className="w-[80px] font-outfit_bold">Rayting: </div>
+              <div className="text-[#324d67]">{product.rating}</div>
+            </div>
+            <div className="text-[18px] flex gap-[50px] mt-[20px] text-[#102a42]">
+              <div className="w-[80px] font-outfit_bold">Stock: </div>
+              <div className="text-[#324d67]">{product.stock}</div>
+            </div>
+            <div className="text-[18px] flex gap-[50px] mt-[20px] text-[#102a42]">
+              <div className="w-[80px] font-outfit_bold">Brand: </div>
+              <div className="text-[#324d67]">{product.brand}</div>
+            </div>
+            <p className="text-[18px] leading-8 mt-[20px] font-poppins text-[#324d67]">
+              {product.description}
+            </p>
           </div>
         </div>
       </div>
