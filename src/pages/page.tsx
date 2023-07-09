@@ -64,9 +64,11 @@ export default class Page extends Component<PageProps, PageState> {
     }
 
     return (
-      <div className="text-black">
-        Page {pathname.substring(1)}
-        <div>{product.title}</div>
+      <div className="w-full h-[100vh] p-[30px]">
+        <button className="uppercase text-[#eaded7] bg-[#ab7a5f] p-[10px] text-[20px] rounded-[10px]">
+          Back to products
+        </button>
+        <div className="h-full bg-red-500 mt-[50px]"></div>
       </div>
     );
   }

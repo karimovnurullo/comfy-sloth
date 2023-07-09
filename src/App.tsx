@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Menus, Products } from "./components";
-import { NotFound, Page } from "./pages";
+import { Home, NotFound, Page } from "./pages";
 import { IEntity, baseURL } from "./types";
 
 interface AppState {
@@ -37,27 +37,26 @@ export default class App extends Component<{}, AppState> {
   getPage = (filteredProducts: IEntity.IProduct[]) => {
     const products = JSON.parse(localStorage.getItem("products")!) || [];
     const { pathname } = this.state;
+    const { handleFilter, handleNavigate } = this;
     const productIds = products.map((product: IEntity.IProduct) => product.id);
 
     if (pathname === "/") {
       return (
-        <div className="app-container">
-          <Menus onFilter={this.handleFilter} />
-          <Products
-            products={filteredProducts}
-            onNavigate={this.handleNavigate}
-          />
-        </div>
+        <Home
+          onFilter={handleFilter}
+          products={filteredProducts}
+          onNavigate={handleNavigate}
+        />
       );
     } else if (productIds.includes(parseInt(pathname.substring(1)))) {
-      return <Page onNavigate={this.handleNavigate} />;
+      return <Page onNavigate={handleNavigate} />;
     } else if (
       isNaN(parseInt(pathname.substring(1))) ||
       isNaN(parseInt(pathname))
     ) {
-      return <NotFound onNavigate={this.handleNavigate} />;
+      return <NotFound onNavigate={handleNavigate} />;
     } else {
-      return <NotFound onNavigate={this.handleNavigate} />;
+      return <NotFound onNavigate={handleNavigate} />;
     }
   };
 
@@ -69,20 +68,5 @@ export default class App extends Component<{}, AppState> {
         ? products
         : products.filter((p: IEntity.IProduct) => p.category == category);
     return <>{this.getPage(filteredProducts)}</>;
-    // return (
-    //   <>
-    //     {aboutPage ? (
-    //       <Page />
-    //     ) : (
-    //       <div className="app-container">
-    //         <Menus onFilter={this.handleFilter} />
-    //         <Products
-    //           products={filteredProducts}
-    //           onNavigate={this.handleNavigate}
-    //         />
-    //       </div>
-    //     )}
-    //   </>
-    // );
   }
 }
