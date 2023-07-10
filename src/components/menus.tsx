@@ -43,7 +43,6 @@ export default class Menus extends Component<MenusProps, MenusState> {
         arr.push(category);
       }
     });
-
     return arr;
   };
 
@@ -56,11 +55,12 @@ export default class Menus extends Component<MenusProps, MenusState> {
   componentDidMount(): void {
     this.getCategories();
     this.getProducts();
+    this.filteredCategories();
   }
 
   render() {
     const { onFilter, onSearch } = this.props;
-    const arr = this.filteredCategories();
+    const categories = this.filteredCategories();
     const { priceRange } = this.state;
 
     const formattedPrice = new Intl.NumberFormat("en-US", {
@@ -82,7 +82,7 @@ export default class Menus extends Component<MenusProps, MenusState> {
             <li className="menu" onClick={() => onFilter("all", priceRange)}>
               All
             </li>
-            {arr.map((title) => (
+            {categories.map((title) => (
               <li
                 key={title}
                 className="menu"
@@ -98,7 +98,7 @@ export default class Menus extends Component<MenusProps, MenusState> {
           <div className="price-number">{formattedPrice}</div>
           <input
             type="range"
-            min="0"
+            min="1"
             max="3000"
             step="1"
             value={priceRange}

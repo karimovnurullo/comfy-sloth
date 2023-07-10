@@ -1,5 +1,7 @@
 import { Component } from "react";
 import axios from "axios";
+import { Puff } from "react-loader-spinner";
+
 import { Home, NotFound, Page } from "./pages";
 import { IEntity, baseURL } from "./types";
 import { data } from "./service/data";
@@ -11,6 +13,8 @@ interface AppState {
   filteredProducts: IEntity.IProduct[];
   sortBy: string;
   sortPrice: number;
+  found: boolean;
+  loading: boolean;
 }
 
 export default class App extends Component<{}, AppState> {
@@ -21,27 +25,70 @@ export default class App extends Component<{}, AppState> {
     filteredProducts: [],
     sortBy: "lowest",
     sortPrice: 0,
+    found: false,
+    loading: true,
   };
 
   // getProducts = async () => {
   //   const { data } = await axios.get(`${baseURL}/products`);
+  //   const products = data.products;
+  //   localStorage.setItem("products", JSON.stringify(products));
+  //   const productIds = products.map((product: IEntity.IProduct) =>
+  //     product.id.toString()
+  //   );
+  //   const found = productIds.includes(this.state.pathname.substring(1));
+  //   localStorage.setItem("products", JSON.stringify(products));
   //   this.setState({
-  //     products: data.products,
-  //     filteredProducts: data.products,
+  //     products,
+  //     filteredProducts: products,
+  //     found,
   //   });
-  //   localStorage.setItem("products", JSON.stringify(data.products));
   // };
-  getProducts = () => {
-    const products = data();
+
+  getProducts = async () => {
+    const { data } = await axios.get(`${baseURL}/products`);
+    const products = data.products;
+    localStorage.setItem("products", JSON.stringify(products));
+    const productIds = products.map((product: IEntity.IProduct) =>
+      product.id.toString()
+    );
+    const found = productIds.includes(this.state.pathname.substring(1));
     this.setState({
       products,
       filteredProducts: products,
+      found,
+      loading: false,
     });
-    localStorage.setItem("products", JSON.stringify(products));
   };
+  // getProducts = () => {
+  //   const products = data();
+  //   this.setState({
+  //     products,
+  //     filteredProducts: products,
+  //   });
+  //   localStorage.setItem("products", JSON.stringify(products));
+  // };
 
+  // componentDidMount(): void {
+  //   this.getProducts();
+  // }
   componentDidMount(): void {
-    this.getProducts();
+    const storedProducts = localStorage.getItem("products");
+    if (storedProducts) {
+      const products = JSON.parse(storedProducts);
+      const productIds = products.map((product: IEntity.IProduct) =>
+        product.id.toString()
+      );
+      const found = productIds.includes(this.state.pathname.substring(1));
+      this.setState({
+        products,
+        filteredProducts: products,
+        found,
+        loading: false,
+      });
+    } else {
+      this.getProducts();
+    }
   }
 
   handleFilter = (title: string) => {
@@ -56,7 +103,7 @@ export default class App extends Component<{}, AppState> {
   };
 
   handleNavigate = (id: string) => {
-    this.setState({ pathname: id });
+    this.setState({ pathname: id, found: true });
   };
 
   handleSearch = (value: string) => {
@@ -101,21 +148,18 @@ export default class App extends Component<{}, AppState> {
       sortedProducts = sortedProducts.filter(
         (product) => product.price <= sortPrice
       );
-    }
+    } else if (sortPrice > 0) sortedProducts = [];
 
     return sortedProducts;
   };
 
   getPage = () => {
-    const { pathname, category, products } = this.state;
+    const { pathname, found } = this.state;
+
     const { handleNavigate, handlePriceChange } = this;
     const sortedProducts = this.sortProducts();
     // const productIds = products.map((product: IEntity.IProduct) => product.id);
     // const found = productIds.includes(parseInt(pathname.substring(1)));
-    const productIds = products.map((product: IEntity.IProduct) =>
-      product.id.toString()
-    );
-    const found = productIds.includes(pathname.substring(1));
 
     if (pathname === "/") {
       return (
@@ -137,6 +181,22 @@ export default class App extends Component<{}, AppState> {
   };
 
   render() {
+    if (this.state.loading) {
+      return (
+        <div className="w-full h-[100vh] flex justify-center items-center">
+          <Puff
+            height="80"
+            width="80"
+            radius={1}
+            color="#000"
+            ariaLabel="puff-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        </div>
+      );
+    }
     return <>{this.getPage()}</>;
   }
 }

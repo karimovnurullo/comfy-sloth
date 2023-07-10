@@ -11,7 +11,6 @@ interface PageProps {
 }
 interface PageState {
   product: IEntity.IProduct | null;
-  notFound: boolean;
   mainImage: string;
   loading: boolean;
 }
@@ -20,7 +19,6 @@ export default class Page extends Component<PageProps, PageState> {
   state: PageState = {
     product: null,
     mainImage: "",
-    notFound: true,
     loading: true,
   };
 
@@ -38,20 +36,14 @@ export default class Page extends Component<PageProps, PageState> {
   //     }
   //   }
   // };
-  getProduct = () => {
-    const { products } = this.props;
+  getProduct = async () => {
+    const { products } = await this.props;
     const id = parseInt(window.location.pathname.substring(1));
     const product = products.filter((p: IEntity.IProduct) => p.id === id)[0];
-    console.log(product);
-    const productIds = products.map((product: IEntity.IProduct) =>
-      product.id.toString()
-    );
-    const found = productIds.includes(window.location.pathname.substring(1));
-
     this.setState({
       product,
       mainImage: product?.thumbnail,
-      notFound: !found,
+      loading: false,
     });
     localStorage.setItem("product", JSON.stringify(product));
   };
@@ -69,7 +61,7 @@ export default class Page extends Component<PageProps, PageState> {
   };
 
   render() {
-    const { notFound, mainImage, product } = this.state;
+    const { mainImage, product, loading } = this.state;
     const { handleNavigate, handleImage } = this;
     // const product: IEntity.IProduct = JSON.parse(
     //   localStorage.getItem("product")!
@@ -80,26 +72,26 @@ export default class Page extends Component<PageProps, PageState> {
     // if (notFound) {
     //   return <NotFound onNavigate={this.props.onNavigate} />;
     // }
-    if (notFound) {
-      return <h1>Not found</h1>;
-    }
-
-    // if (!product) {
-    //   return (
-    //     <div className="w-full h-[100vh] flex justify-center items-center">
-    //       <Puff
-    //         height="80"
-    //         width="80"
-    //         radius={1}
-    //         color="#000"
-    //         ariaLabel="puff-loading"
-    //         wrapperStyle={{}}
-    //         wrapperClass=""
-    //         visible={true}
-    //       />
-    //     </div>
-    //   );
+    // if (notFound) {
+    //   return <h1>Not found</h1>;
     // }
+
+    if (loading) {
+      return (
+        <div className="w-full h-[100vh] flex justify-center items-center">
+          <Puff
+            height="80"
+            width="80"
+            radius={1}
+            color="#000"
+            ariaLabel="puff-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        </div>
+      );
+    }
 
     return (
       <div className="w-full p-[50px] ">
