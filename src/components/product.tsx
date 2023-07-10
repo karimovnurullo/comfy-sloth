@@ -18,7 +18,7 @@ export default class Product extends Component<ProductProps> {
     return (
       <div className="product" onClick={() => this.handleNavigate(id)}>
         <div className="img-box">
-          <img src={thumbnail} alt="" />
+          <img src={thumbnail} alt="Product image" />
         </div>
         <div className="content">
           <p className="title w-[200px] overflow-hidden whitespace-nowrap text-ellipsis ">

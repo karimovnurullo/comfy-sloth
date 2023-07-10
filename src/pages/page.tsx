@@ -6,34 +6,54 @@ import NotFound from "./404";
 import "../assets/css/main.scss";
 
 interface PageProps {
+  products: IEntity.IProduct[];
   onNavigate: (id: string) => void;
 }
 interface PageState {
   product: IEntity.IProduct | null;
   notFound: boolean;
   mainImage: string;
+  loading: boolean;
 }
 
 export default class Page extends Component<PageProps, PageState> {
   state: PageState = {
     product: null,
-    notFound: false,
     mainImage: "",
+    notFound: true,
+    loading: true,
   };
 
-  getProduct = async () => {
-    try {
-      const id = window.location.pathname.substring(1);
-      const res = await axios.get(`${baseURL}/products/${id}`);
-      let data: IEntity.IProduct = res.data;
-      this.setState({ product: data, mainImage: data.thumbnail });
-      localStorage.setItem("product", JSON.stringify(data));
-    } catch (error: any) {
-      console.log("Error fetching product");
-      if (error.response && error.response.status === 404) {
-        this.setState({ notFound: true });
-      }
-    }
+  // getProduct = async () => {
+  //   try {
+  //     const id = window.location.pathname.substring(1);
+  //     const res = await axios.get(`${baseURL}/products/${id}`);
+  //     let data: IEntity.IProduct = res.data;
+  //     this.setState({ product: data, mainImage: data.thumbnail });
+  //     localStorage.setItem("product", JSON.stringify(data));
+  //   } catch (error: any) {
+  //     console.log("Error fetching product");
+  //     if (error.response && error.response.status === 404) {
+  //       this.setState({ notFound: true });
+  //     }
+  //   }
+  // };
+  getProduct = () => {
+    const { products } = this.props;
+    const id = parseInt(window.location.pathname.substring(1));
+    const product = products.filter((p: IEntity.IProduct) => p.id === id)[0];
+    console.log(product);
+    const productIds = products.map((product: IEntity.IProduct) =>
+      product.id.toString()
+    );
+    const found = productIds.includes(window.location.pathname.substring(1));
+
+    this.setState({
+      product,
+      mainImage: product?.thumbnail,
+      notFound: !found,
+    });
+    localStorage.setItem("product", JSON.stringify(product));
   };
 
   componentDidMount(): void {
@@ -49,32 +69,37 @@ export default class Page extends Component<PageProps, PageState> {
   };
 
   render() {
-    const { notFound, mainImage } = this.state;
+    const { notFound, mainImage, product } = this.state;
     const { handleNavigate, handleImage } = this;
-    const product: IEntity.IProduct = JSON.parse(
-      localStorage.getItem("product")!
-    );
+    // const product: IEntity.IProduct = JSON.parse(
+    //   localStorage.getItem("product")!
+    // );
+    // const notFound = JSON.parse(localStorage.getItem("notFound")!);
+    // const mainImage = JSON.parse(localStorage.getItem("mainImage")!);
 
+    // if (notFound) {
+    //   return <NotFound onNavigate={this.props.onNavigate} />;
+    // }
     if (notFound) {
-      return <NotFound onNavigate={this.props.onNavigate} />;
+      return <h1>Not found</h1>;
     }
 
-    if (!product) {
-      return (
-        <div className="w-full h-[100vh] flex justify-center items-center">
-          <Puff
-            height="80"
-            width="80"
-            radius={1}
-            color="#000"
-            ariaLabel="puff-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
-          />
-        </div>
-      );
-    }
+    // if (!product) {
+    //   return (
+    //     <div className="w-full h-[100vh] flex justify-center items-center">
+    //       <Puff
+    //         height="80"
+    //         width="80"
+    //         radius={1}
+    //         color="#000"
+    //         ariaLabel="puff-loading"
+    //         wrapperStyle={{}}
+    //         wrapperClass=""
+    //         visible={true}
+    //       />
+    //     </div>
+    //   );
+    // }
 
     return (
       <div className="w-full p-[50px] ">
@@ -92,7 +117,7 @@ export default class Page extends Component<PageProps, PageState> {
               className="w-full h-[450px] border-[1px] border-[#ab7a5f] object-cover  rounded-[10px]"
             />
             <div className="w-full h-fit py-[10px] flex gap-[10px] overflow-x-auto">
-              {product.images.map((img) => (
+              {product?.images.map((img) => (
                 <img
                   key={img}
                   src={img}
@@ -109,25 +134,25 @@ export default class Page extends Component<PageProps, PageState> {
           </div>
           <div className="w-1/2 ">
             <h2 className="text-[40px] font-outfit_bold text-[#102a42]">
-              {product.title}
+              {product?.title}
             </h2>
             <p className="text-[30px] mt-[20px] font-outfit_bold text-[#ab7a5f] font-bold">
-              ${product.price}
+              ${product?.price}
             </p>
             <div className="text-[18px] flex gap-[50px] mt-[20px] text-[#102a42]">
               <div className="w-[80px] font-outfit_bold">Rayting: </div>
-              <div className="text-[#324d67]">{product.rating}</div>
+              <div className="text-[#324d67]">{product?.rating}</div>
             </div>
             <div className="text-[18px] flex gap-[50px] mt-[20px] text-[#102a42]">
               <div className="w-[80px] font-outfit_bold">Stock: </div>
-              <div className="text-[#324d67]">{product.stock}</div>
+              <div className="text-[#324d67]">{product?.stock}</div>
             </div>
             <div className="text-[18px] flex gap-[50px] mt-[20px] text-[#102a42]">
               <div className="w-[80px] font-outfit_bold">Brand: </div>
-              <div className="text-[#324d67]">{product.brand}</div>
+              <div className="text-[#324d67]">{product?.brand}</div>
             </div>
             <p className="text-[18px] leading-8 mt-[20px] font-poppins text-[#324d67]">
-              {product.description}
+              {product?.description}
             </p>
           </div>
         </div>

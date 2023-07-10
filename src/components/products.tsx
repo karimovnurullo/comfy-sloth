@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Puff } from "react-loader-spinner";
 import "../assets/css/main.scss";
 import Product from "./product";
 import { IEntity } from "../types";
@@ -34,6 +35,23 @@ export default class Products extends Component<ProductsProps, ProductsState> {
     const { products, onNavigate } = this.props;
     const { sortBy, options } = this.state;
 
+    if (!products) {
+      return (
+        <div className="w-full h-[100vh] bg-rd-600 flex justify-center items-center">
+          <Puff
+            height="80"
+            width="80"
+            radius={1}
+            color="#000"
+            ariaLabel="puff-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+          {/* asds */}
+        </div>
+      );
+    }
     return (
       <div className="products">
         <div className="nav">

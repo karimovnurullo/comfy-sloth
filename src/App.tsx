@@ -2,6 +2,7 @@ import { Component } from "react";
 import axios from "axios";
 import { Home, NotFound, Page } from "./pages";
 import { IEntity, baseURL } from "./types";
+import { data } from "./service/data";
 
 interface AppState {
   products: IEntity.IProduct[];
@@ -22,13 +23,21 @@ export default class App extends Component<{}, AppState> {
     sortPrice: 0,
   };
 
-  getProducts = async () => {
-    const { data } = await axios.get(`${baseURL}/products`);
+  // getProducts = async () => {
+  //   const { data } = await axios.get(`${baseURL}/products`);
+  //   this.setState({
+  //     products: data.products,
+  //     filteredProducts: data.products,
+  //   });
+  //   localStorage.setItem("products", JSON.stringify(data.products));
+  // };
+  getProducts = () => {
+    const products = data();
     this.setState({
-      products: data.products,
-      filteredProducts: data.products,
+      products,
+      filteredProducts: products,
     });
-    localStorage.setItem("products", JSON.stringify(data.products));
+    localStorage.setItem("products", JSON.stringify(products));
   };
 
   componentDidMount(): void {
@@ -101,7 +110,12 @@ export default class App extends Component<{}, AppState> {
     const { pathname, category, products } = this.state;
     const { handleNavigate, handlePriceChange } = this;
     const sortedProducts = this.sortProducts();
-    const productIds = products.map((product: IEntity.IProduct) => product.id);
+    // const productIds = products.map((product: IEntity.IProduct) => product.id);
+    // const found = productIds.includes(parseInt(pathname.substring(1)));
+    const productIds = products.map((product: IEntity.IProduct) =>
+      product.id.toString()
+    );
+    const found = productIds.includes(pathname.substring(1));
 
     if (pathname === "/") {
       return (
@@ -114,9 +128,10 @@ export default class App extends Component<{}, AppState> {
           onPrice={handlePriceChange}
         />
       );
-    } else if (productIds.includes(parseInt(pathname.substring(1)))) {
-      return <Page onNavigate={handleNavigate} />;
+    } else if (found) {
+      return <Page products={sortedProducts} onNavigate={handleNavigate} />;
     } else {
+      // return;
       return <NotFound onNavigate={handleNavigate} />;
     }
   };
