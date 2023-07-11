@@ -15,6 +15,7 @@ interface AppState {
   sortPrice: number;
   found: boolean;
   loading: boolean;
+  sortView: string;
 }
 
 export default class App extends Component<{}, AppState> {
@@ -27,6 +28,7 @@ export default class App extends Component<{}, AppState> {
     sortPrice: 0,
     found: false,
     loading: true,
+    sortView: "grid",
   };
 
   // getProducts = async () => {
@@ -122,6 +124,9 @@ export default class App extends Component<{}, AppState> {
   handlePriceChange = (value: number) => {
     this.setState({ sortPrice: value });
   };
+  onSortView = (value: string) => {
+    this.setState({ sortView: value });
+  };
 
   sortProducts = () => {
     const { filteredProducts, sortBy, sortPrice } = this.state;
@@ -154,13 +159,10 @@ export default class App extends Component<{}, AppState> {
   };
 
   getPage = () => {
-    const { pathname, found } = this.state;
+    const { pathname, found, sortView } = this.state;
 
-    const { handleNavigate, handlePriceChange } = this;
+    const { handleNavigate, handlePriceChange, onSortView } = this;
     const sortedProducts = this.sortProducts();
-    // const productIds = products.map((product: IEntity.IProduct) => product.id);
-    // const found = productIds.includes(parseInt(pathname.substring(1)));
-
     if (pathname === "/") {
       return (
         <Home
@@ -170,6 +172,8 @@ export default class App extends Component<{}, AppState> {
           products={sortedProducts}
           onNavigate={handleNavigate}
           onPrice={handlePriceChange}
+          sortView={sortView}
+          onSortView={onSortView}
         />
       );
     } else if (found) {

@@ -8,6 +8,8 @@ interface ProductsProps {
   products: IEntity.IProduct[];
   onNavigate: (id: string) => void;
   onSort: (value: string) => void;
+  onSortView: (value: string) => void;
+  sortView: string;
 }
 
 interface ProductsState {
@@ -32,7 +34,7 @@ export default class Products extends Component<ProductsProps, ProductsState> {
   };
 
   render() {
-    const { products, onNavigate } = this.props;
+    const { products, onNavigate, sortView, onSortView } = this.props;
     const { sortBy, options } = this.state;
 
     if (!products) {
@@ -56,8 +58,14 @@ export default class Products extends Component<ProductsProps, ProductsState> {
       <div className="products">
         <div className="nav">
           <div className="icons">
-            <i className="fa-solid fa-border-all grid-icon"></i>
-            <i className="fa-solid fa-grip-lines grid-icon"></i>
+            <i
+              className="fa-solid fa-border-all grid-icon"
+              onClick={() => onSortView("grid")}
+            ></i>
+            <i
+              className="fa-solid fa-grip-lines grid-icon"
+              onClick={() => onSortView("flex-col")}
+            ></i>
           </div>
           <div>{products.length} Products Found</div>
           <hr className="line" />
@@ -74,13 +82,17 @@ export default class Products extends Component<ProductsProps, ProductsState> {
             ))}
           </select>
         </div>
-        <div className="main">
+        <div className={`${sortView === "grid" ? "main" : "main-col"} `}>
+          {/* ${
+            sortView === "grid " ? "grid " : "flex flex-col"
+          } */}
           {products.length !== 0 ? (
             products.map((product) => (
               <Product
                 key={product.id}
                 product={product}
                 onNavigate={onNavigate}
+                sortView={sortView}
               />
             ))
           ) : (

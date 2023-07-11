@@ -8,19 +8,17 @@ interface HomeProps {
   onSearch: (value: string) => void;
   onSort: (value: string) => void;
   onPrice: (value: number) => void;
+  onSortView: (value: string) => void;
+  sortView: string;
 }
 
 export default class Home extends Component<HomeProps> {
   render() {
-    const { onFilter, products, onNavigate, onSort, onPrice } = this.props;
+    const { ...args } = this.props;
     return (
       <div className="app-container">
-        <Menus
-          onPrice={onPrice}
-          onSearch={this.props.onSearch}
-          onFilter={onFilter}
-        />
-        <Products onSort={onSort} products={products} onNavigate={onNavigate} />
+        <Menus {...args} />
+        <Products {...args} />
       </div>
     );
   }
